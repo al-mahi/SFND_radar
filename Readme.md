@@ -153,4 +153,5 @@ figure('Name','CA-CFAR Filtered RDM'),surf(doppler_axis,range_axis,RDM);
 colorbar;
 ```
 
-![](images/2DFFT.png)
+![](images/CA_CFAR.png)
+
