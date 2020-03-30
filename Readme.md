@@ -69,6 +69,18 @@ plot(signal_fft);
 #### 2D CFAR
 ##### Implement the 2D CFAR process on the output of 2D FFT operation, i.e the Range Doppler Map.
 
+###### Steps for 2D CFAR
+* Outer loop was created which slides the CUT accross doppler map by a margin determined by Training Cell and Guard cell
+* For every iteration summation of the signal level within all the training cells was taken by a inner loop of variable m and n
+* Average of the summed values was calculated and converted to decible scale using pow2db 
+* An offset variable was used to get CUT from the decible threshold
+* RDM was filtered by assigin 1 and 0 based on whther the RMD cell exceeds the CUT or not
+###### Selection of Training, Guard cells and offset.
+* Training and Guard Cells were hand picked. Different values was tried and Tr = 10, Tc = 8, Gr = 4 Gc = 4 values for were fixed
+* Different offset values was trialed. An offset-10 was fixed based on trial and error basis
+###### Steps taken to suppress the non-thresholded cells at the edges.
+* The process above will generate a thresholded block, which is smaller than the Range Doppler Map as the CUT cannot be located at the edges of matrix
+* Thus edges of the matrix was loop using two different loops and set to zero to supress them.
 ![](images/2DFFT.png)
 
 ``` matlab
@@ -103,7 +115,8 @@ noise_level = zeros(1,1);
 
    % Use RDM[x,y] as the matrix from the output of 2D FFT for implementing
    % CFAR
-% RDM = RDM/max(max(RDM));
+
+
 RDM_pow = db2pow(RDM);
 
 for i=Tr+Gr+1: (Nr/2) -(Tr+Gr)
@@ -154,4 +167,3 @@ colorbar;
 ```
 
 ![](images/CA_CFAR.png)
-
